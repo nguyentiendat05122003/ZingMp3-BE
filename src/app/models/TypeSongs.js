@@ -1,9 +1,9 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const { sequelize } = require("../../config/db");
-const Song = sequelize.define(
-  "Songs",
+const TypeSong = sequelize.define(
+  "TypeSongs",
   {
-    id: {
+    typeSongId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -12,16 +12,8 @@ const Song = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    image: {
-      type: DataTypes.STRING,
-    },
-    source: {
-      type: DataTypes.STRING,
-    },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 sequelize
@@ -32,4 +24,5 @@ sequelize
   .catch((error) => {
     console.error("Lỗi khi đồng bộ hóa mô hình:", error);
   });
-module.exports = Song;
+
+module.exports = TypeSong;

@@ -1,10 +1,11 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const { sequelize } = require("../../config/db");
-const Account = require("./Accounts");
-const User = sequelize.define(
-  "Users",
+const TypeSong = require("./TypeSongs");
+const User = require("./Users");
+const Song = sequelize.define(
+  "Songs",
   {
-    userId: {
+    songId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -13,35 +14,35 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    birthDay: {
-      type: DataTypes.DATE,
-    },
-    email: {
+    image: {
       type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
     },
-    country: {
+    source: {
       type: DataTypes.STRING,
     },
     desc: {
       type: DataTypes.STRING,
     },
-    image: {
-      type: DataTypes.STRING,
-    },
-    accountId: {
+    typeSongId: {
       type: DataTypes.INTEGER,
-      field: "accountId",
+      field: "typeSongId",
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      field: "userId",
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
-
-User.belongsTo(Account, {
-  foreignKey: "accountId",
+Song.belongsTo(TypeSong, {
+  foreignKey: "typeSongId",
 });
 
+Song.belongsTo(User, {
+  foreignKey: "userId",
+});
 sequelize
   .sync()
   .then(() => {
@@ -50,5 +51,4 @@ sequelize
   .catch((error) => {
     console.error("Lỗi khi đồng bộ hóa mô hình:", error);
   });
-
-module.exports = User;
+module.exports = Song;

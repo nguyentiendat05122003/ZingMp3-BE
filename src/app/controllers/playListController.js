@@ -1,4 +1,4 @@
-const PlayList = require("../models/PlayList");
+const PlayList = require("../models/PlayLists");
 class PlayListControllers {
   index(req, res) {
     res.json("ok");

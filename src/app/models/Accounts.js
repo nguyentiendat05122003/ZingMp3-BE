@@ -1,9 +1,10 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const { sequelize } = require("../../config/db");
+const TypeAccount = require("./TypeAccounts");
 const Account = sequelize.define(
   "Accounts",
   {
-    id: {
+    accountId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -17,10 +18,16 @@ const Account = sequelize.define(
       allowNull: false,
       unique: true,
     },
+    typeAccountId: {
+      type: DataTypes.INTEGER,
+      field: "typeAccountId",
+    },
   },
   { timestamps: true }
 );
-
+Account.belongsTo(TypeAccount, {
+  foreignKey: "typeAccountId",
+});
 sequelize
   .sync()
   .then(() => {

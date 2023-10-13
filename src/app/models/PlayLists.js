@@ -1,7 +1,8 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const { sequelize } = require("../../config/db");
+const User = require("./Users");
 const PlayList = sequelize.define("PlayLists", {
-  id: {
+  playListId: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -10,6 +11,14 @@ const PlayList = sequelize.define("PlayLists", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  userId: {
+    type: DataTypes.INTEGER,
+    field: "userId",
+  },
+});
+
+PlayList.belongsTo(User, {
+  foreignKey: "userId",
 });
 
 sequelize

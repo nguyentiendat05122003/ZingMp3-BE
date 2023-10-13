@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const { sequelize } = require("../../config/db");
-const Artist = sequelize.define("Artists", {
-  id: {
+const TypeAccount = sequelize.define("TypeAccounts", {
+  typeAccountId: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -9,23 +9,6 @@ const Artist = sequelize.define("Artists", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  birthDay: {
-    type: DataTypes.DATE,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  country: {
-    type: DataTypes.STRING,
-  },
-  desc: {
-    type: DataTypes.STRING,
-  },
-  image: {
-    type: DataTypes.STRING,
   },
 });
 
@@ -38,4 +21,4 @@ sequelize
     console.error("Lỗi khi đồng bộ hóa mô hình:", error);
   });
 
-module.exports = Artist;
+module.exports = TypeAccount;

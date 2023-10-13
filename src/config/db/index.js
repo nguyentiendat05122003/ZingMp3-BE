@@ -1,6 +1,6 @@
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize("ZingMp3_DB", "datnguyen", "123456", {
+const sequelize = new Sequelize("zing-clone", "datnguyen", "123456", {
   host: "localhost",
   dialect: "mssql",
   define: {
