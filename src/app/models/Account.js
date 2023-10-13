@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const { sequelize } = require("../../config/db");
-const User = sequelize.define(
-  "Users",
+const Account = sequelize.define(
+  "Accounts",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -12,14 +12,10 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    email: {
+    password: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-    },
-    country: {
-      type: DataTypes.STRING,
-      allowNull: true,
     },
   },
   { timestamps: true }
@@ -34,4 +30,4 @@ sequelize
     console.error("Lỗi khi đồng bộ hóa mô hình:", error);
   });
 
-module.exports = User;
+module.exports = Account;

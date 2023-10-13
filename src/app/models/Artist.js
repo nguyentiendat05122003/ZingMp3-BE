@@ -24,6 +24,9 @@ const Artist = sequelize.define("Artists", {
   desc: {
     type: DataTypes.STRING,
   },
+  image: {
+    type: DataTypes.STRING,
+  },
 });
 
 sequelize
