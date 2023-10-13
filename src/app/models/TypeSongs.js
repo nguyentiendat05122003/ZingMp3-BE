@@ -13,7 +13,7 @@ const TypeSong = sequelize.define(
       allowNull: false,
     },
   },
-  { timestamps: true }
+  { timestamps: false }
 );
 
 sequelize
