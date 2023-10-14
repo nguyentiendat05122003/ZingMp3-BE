@@ -13,7 +13,14 @@ router.post(
   ]),
   songController.add
 );
-router.put("/:id/edit", songController.edit);
+router.put(
+  "/:id/edit",
+  upload.fields([
+    { name: "image", maxCount: 1 },
+    { name: "source", maxCount: 1 },
+  ]),
+  songController.edit
+);
 router.delete("/:id/delete", songController.delete);
 
 module.exports = router;

@@ -1,5 +1,4 @@
 const Song = require("../models/Songs");
-const middleWareController = require("./middleWareController");
 const { initializeApp } = require("firebase/app");
 const {
   getStorage,
@@ -53,24 +52,55 @@ class SongControllers {
       );
       const downloadURLAudio = await getDownloadURL(snapshotAudio.ref);
       const newSong = Song.create({
-        name: req.body.name,
+        ...req.body,
         image: downloadURLImage,
-        // image: middleWareController.pushImageToStore(req, res),
-        //source: middleWareController.pushAudioToStore(req, res),
         source: downloadURLAudio,
-        desc: req.body.desc,
-        typeSongId: req.body.typeSongId,
-        userId: req.body.userId,
       });
-      res.status(200).json("ok");
+      res.status(200).json("add song successful");
     } catch (error) {
       next(error);
     }
   }
 
   //[PUT] song/:id/edit
-  edit(req, res) {}
-
+  async edit(req, res) {
+    try {
+      const updatedData = req.body;
+      if (req.files["image"]) {
+        const imageStoragePath = `images/${req.files["image"][0].originalname}`;
+        const imageStorageRef = ref(storage, imageStoragePath);
+        const imageMetadata = { contentType: req.files["image"][0].mimetype };
+        const imageSnapshot = await uploadBytesResumable(
+          imageStorageRef,
+          req.files["image"][0].buffer,
+          imageMetadata
+        );
+        updatedData.image = await getDownloadURL(imageSnapshot.ref);
+      }
+      if (req.files["source"]) {
+        const audioStoragePath = `source/${req.files["source"][0].originalname}`;
+        const audioStorageRef = ref(storage, audioStoragePath);
+        const audioMetadata = { contentType: "audio/mp3" };
+        const audioSnapshot = await uploadBytesResumable(
+          audioStorageRef,
+          req.files["source"][0].buffer,
+          audioMetadata
+        );
+        updatedData.source = await getDownloadURL(audioSnapshot.ref);
+      }
+      await Song.update(
+        { ...updatedData },
+        {
+          where: {
+            songId: req.params.id,
+          },
+        }
+      );
+      res.json("edit success");
+    } catch (error) {
+      res.json(error);
+    }
+  }
   //[DELETE] song/:id/delete
   async delete(req, res) {
     await Song.destroy({
