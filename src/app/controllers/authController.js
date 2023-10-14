@@ -1,7 +1,8 @@
 const Account = require("../models/Accounts");
-const TypeAccount = require("../models/TypeAccounts");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 class AuthController {
+  //[POST] /register
   async register(req, res) {
     try {
       const salt = await bcrypt.genSalt(10);
@@ -15,6 +16,9 @@ class AuthController {
       res.status(500).json(err);
     }
   }
+
+  //[POST] /login
+  //create jwt after login
   async login(req, res) {
     try {
       const account = await Account.findOne({
@@ -34,7 +38,17 @@ class AuthController {
         return res.status(404).json("wrong password");
       }
       if (account && validPassword) {
-        res.status(200).json("login successful");
+        const accessToken = jwt.sign(
+          {
+            id: account.id,
+            typeAccount: account.typeAccountId,
+          },
+          process.env.ACCESS_TOKEN_SECRET_KEY,
+          { expiresIn: "365d" }
+        );
+        const { password, ...rest } = account.dataValues;
+        //Why we need expiresIn because token can lost so after expiresIn token is'nt use
+        res.status(200).json({ account: rest, accessToken });
       }
     } catch (error) {
       res.status(500).json(error);

@@ -101,6 +101,7 @@ class SongControllers {
       res.json(error);
     }
   }
+
   //[DELETE] song/:id/delete
   async delete(req, res) {
     await Song.destroy({
