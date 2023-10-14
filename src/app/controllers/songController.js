@@ -28,7 +28,7 @@ class SongControllers {
       const dateTime = giveCurrentDateTime();
       const storageRef = ref(
         storage,
-        `images/${req.files["image"][0] + "       " + dateTime}`
+        `images/${req.files["image"][0].originalname + "       " + dateTime}`
       );
       const metadata = {
         contentType: req.files["image"][0].mimetype,
@@ -41,7 +41,7 @@ class SongControllers {
       const downloadURLImage = await getDownloadURL(snapshot.ref);
       const storageRefAudio = ref(
         storage,
-        `source/${req.files["source"][0] + "       " + dateTime}`
+        `source/${req.files["source"][0].originalname + "       " + dateTime}`
       );
       const metadataAudio = {
         contentType: "audio/mp3",
@@ -72,6 +72,13 @@ class SongControllers {
   edit(req, res) {}
 
   //[DELETE] song/:id/delete
-  delete(req, res) {}
+  async delete(req, res) {
+    await Song.destroy({
+      where: {
+        songId: req.params.id,
+      },
+    });
+    res.status(200).json("Delete successful");
+  }
 }
 module.exports = new SongControllers();
