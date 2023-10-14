@@ -1,5 +1,4 @@
-// Import the functions you need from the SDKs you need
-
+require("dotenv").config();
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
