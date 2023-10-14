@@ -1,25 +1,44 @@
 const Account = require("../models/Accounts");
-const PlayListSong = require("../models/PlayListSongs");
-const PlayList = require("../models/PlayLists");
-const Song = require("../models/Songs");
-const User = require("../models/Users");
 const TypeAccount = require("../models/TypeAccounts");
-const TypeSongs = require("../models/TypeSongs");
+const bcrypt = require("bcrypt");
 class AuthController {
-  async index(req, res) {
-    Account.findAll();
-    TypeAccount.findAll();
-    User.findAll();
-    res.send("ok");
+  async register(req, res) {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+      const account = await Account.create({
+        ...req.body,
+        password: hashedPassword,
+      });
+      res.send("register successful");
+    } catch (error) {
+      res.status(500).json(err);
+    }
   }
-  async addUser(req, res) {
-    const user = await User.create({
-      username: req.body.username,
-      email: req.body.username,
-      password: req.body.password,
-    });
-    user.save();
-    res.send("ok");
+  async login(req, res) {
+    try {
+      const account = await Account.findOne({
+        where: {
+          username: req.body.username,
+          typeAccountId: req.body.typeAccountId,
+        },
+      });
+      if (!account) {
+        return res.status(404).json("wrong username or wrong role");
+      }
+      const validPassword = await bcrypt.compare(
+        req.body.password,
+        account.password
+      );
+      if (!validPassword) {
+        return res.status(404).json("wrong password");
+      }
+      if (account && validPassword) {
+        res.status(200).json("login successful");
+      }
+    } catch (error) {
+      res.status(500).json(error);
+    }
   }
 }
 module.exports = new AuthController();
