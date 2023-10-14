@@ -15,12 +15,17 @@ router.post(
 );
 router.put(
   "/:id/edit",
+  middlewareController.verifyTokenAndArtistAuth,
   upload.fields([
     { name: "image", maxCount: 1 },
     { name: "source", maxCount: 1 },
   ]),
   songController.edit
 );
-router.delete("/:id/delete", songController.delete);
+router.delete(
+  "/:id/delete",
+  middlewareController.verifyTokenAndArtistAuth,
+  songController.delete
+);
 
 module.exports = router;

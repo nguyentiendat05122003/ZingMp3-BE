@@ -33,7 +33,7 @@ class MiddleWareController {
       if (req.account.typeAccountId === process.env.ID_ARTIST) {
         next();
       } else {
-        res.status(403).json("you're not allowed to delete other");
+        res.status(403).json("you're not allowed to use function");
       }
     });
   };

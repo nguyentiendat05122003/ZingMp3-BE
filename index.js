@@ -1,6 +1,7 @@
 const express = require("express");
 const router = require("./src/routes");
 const db = require("./src/config/db");
+const fb = require("./src/config/fireBase/index");
 const app = express();
 const port = 3002;
 
@@ -12,6 +13,9 @@ db.connect();
 
 //init router
 router(app);
+
+//init firebase
+// fb.initFirebase();
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

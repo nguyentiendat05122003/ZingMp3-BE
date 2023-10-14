@@ -1,19 +1,11 @@
 const Song = require("../models/Songs");
-const { initializeApp } = require("firebase/app");
 const {
-  getStorage,
   ref,
   getDownloadURL,
   uploadBytesResumable,
 } = require("firebase/storage");
-const multer = require("multer");
-const config = require("../../config/fireBase/firebase.config");
 const giveCurrentDateTime = require("../../utils/giveCurrentDateTime");
-//Initialize a firebase application
-initializeApp(config.firebaseConfig);
-
-// Initialize Cloud Storage and get a reference to the service
-const storage = getStorage();
+const storage = require("../../config/fireBase");
 class SongControllers {
   //[GET] song/
   async index(req, res) {
@@ -27,7 +19,7 @@ class SongControllers {
       const dateTime = giveCurrentDateTime();
       const storageRef = ref(
         storage,
-        `images/${req.files["image"][0].originalname + "       " + dateTime}`
+        `images/${req.files["image"][0].originalname + dateTime}`
       );
       const metadata = {
         contentType: req.files["image"][0].mimetype,
@@ -40,7 +32,7 @@ class SongControllers {
       const downloadURLImage = await getDownloadURL(snapshot.ref);
       const storageRefAudio = ref(
         storage,
-        `source/${req.files["source"][0].originalname + "       " + dateTime}`
+        `source/${req.files["source"][0].originalname + dateTime}`
       );
       const metadataAudio = {
         contentType: "audio/mp3",

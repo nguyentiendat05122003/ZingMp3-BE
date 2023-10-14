@@ -18,7 +18,7 @@ const Song = sequelize.define(
       type: DataTypes.STRING,
     },
     source: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(1000),
     },
     desc: {
       type: DataTypes.STRING,
