@@ -1,8 +1,16 @@
 const PlayListSong = require("../models/PlayListSongs");
+const { sequelize } = require("../../config/db");
+const { QueryTypes } = require("sequelize");
 class PlayListSongControllers {
-  //[GET] /playListSong
+  //[GET] /playListSong/:id
   async index(req, res) {
-    const listPLayListSong = await PlayListSong.findAll();
+    const listPLayListSong = await sequelize.query(
+      "Exec GetSongsInPlaylist :playListId",
+      {
+        type: QueryTypes.SELECT,
+        replacements: { playListId: req.params.id },
+      }
+    );
     res.json(listPLayListSong);
   }
 
