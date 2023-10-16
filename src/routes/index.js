@@ -5,6 +5,7 @@ const playListSongRouter = require("./playListSong");
 const accountRouter = require("./account");
 const userRouter = require("./user");
 const searchRouter = require("./search");
+const followRouter = require("./follow");
 function router(app) {
   app.use("/search", searchRouter);
   app.use("/auth", authRouter);
@@ -13,5 +14,6 @@ function router(app) {
   app.use("/playList", playListRouter);
   app.use("/user", userRouter);
   app.use("/account", accountRouter);
+  app.use("/follow", followRouter);
 }
 module.exports = router;

@@ -10,7 +10,7 @@ class UserController {
   //[GET] user/
   async index(req, res) {
     const listUser = await User.findAll();
-    res.json(listUser);
+    res.status(200).json(listUser);
   }
 
   //[POST] user/add
@@ -30,42 +30,50 @@ class UserController {
         metadata
       );
       const downloadURLAvatar = await getDownloadURL(snapshot.ref);
-      const newUser = User.create({
+      const newUser = await User.create({
         ...req.body,
         image: downloadURLAvatar,
       });
       res.status(200).json("add user successful");
     } catch (error) {
-      next(error);
+      console.log(error);
     }
   }
 
   //[PUT] user/:id/edit
   async edit(req, res) {
-    try {
-      const updatedData = req.body;
-      if (req.file) {
-        const imageStoragePath = `avatar/${req.file.originalname}`;
-        const imageStorageRef = ref(storage, imageStoragePath);
-        const imageMetadata = { contentType: req.file.mimetype };
-        const imageSnapshot = await uploadBytesResumable(
-          imageStorageRef,
-          req.file.buffer,
-          imageMetadata
-        );
-        updatedData.image = await getDownloadURL(imageSnapshot.ref);
-      }
-      await User.update(
-        { ...updatedData },
-        {
-          where: {
-            userId: req.params.id,
-          },
+    const user = await User.findOne({
+      where: { userId: req.params.id },
+    });
+    if (user) {
+      try {
+        const updatedData = req.body;
+        const dateTime = giveCurrentDateTime();
+        if (req.file) {
+          const imageStoragePath = `avatar/${req.file.originalname + dateTime}`;
+          const imageStorageRef = ref(storage, imageStoragePath);
+          const imageMetadata = { contentType: req.file.mimetype };
+          const imageSnapshot = await uploadBytesResumable(
+            imageStorageRef,
+            req.file.buffer,
+            imageMetadata
+          );
+          updatedData.image = await getDownloadURL(imageSnapshot.ref);
         }
-      );
-      res.json("edit success");
-    } catch (error) {
-      res.json(error);
+        await User.update(
+          { ...updatedData },
+          {
+            where: {
+              userId: req.params.id,
+            },
+          }
+        );
+        res.json("edit success");
+      } catch (error) {
+        res.json(error);
+      }
+    } else {
+      res.json("user not found");
     }
   }
 
