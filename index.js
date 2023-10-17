@@ -14,9 +14,6 @@ db.connect();
 //init router
 router(app);
 
-//init firebase
-// fb.initFirebase();
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

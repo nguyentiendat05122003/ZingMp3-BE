@@ -31,10 +31,10 @@ Account.belongsTo(TypeAccount, {
 sequelize
   .sync()
   .then(() => {
-    console.log("Mô hình đã được đồng bộ hóa với cơ sở dữ liệu.");
+    console.log("Model connect successful");
   })
   .catch((error) => {
-    console.error("Lỗi khi đồng bộ hóa mô hình:", error);
+    console.error("Model connect failure :", error);
   });
 
 module.exports = Account;
